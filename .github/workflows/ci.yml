@@ -102,6 +102,6 @@ jobs:
           artifactErrorsFailBuild: true
           artifacts: |
             build/app/outputs/apk/release/*.apk
-            release.zip
+            build/windows/x64/runner/Release/release.zip
           tag: v1.0.${{ github.run_number}}
           token: ${{ secrets.TOKEN }}
