@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Echo Version
         run: | 
-          echo "Version from get_version: ${{ needs.get_version.outputs.version }}"
+          echo "Version from get_version: ${{ needs.get_version.outputs['version'] }}"
 
   flutter_test:
     name: Run Flutter Test
