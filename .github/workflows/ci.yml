@@ -17,8 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       id: version
-      set-env:
-        FLUTTER_VERSION: ${{ steps.get_version.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -28,7 +26,8 @@ jobs:
           channel: 'stable'
       - name: Get Flutter App Version
         id: get_version
-        run: echo "::set-output name=version::$(grep -oP 'version: \K(.*)' pubspec.yaml | head -n 1 | tr -d '\r')"
+        run: |
+          echo "::set-output name=version::$(grep -oP 'version: \K(.*)' pubspec.yaml | head -n 1 | tr -d '\r')"
         
   flutter_test:
     name: Run Flutter Test
