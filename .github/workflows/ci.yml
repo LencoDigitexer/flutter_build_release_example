@@ -12,11 +12,29 @@ permissions:
   contents: write
 
 jobs:
+  get_version:
+    name: Get Flutter App Version
+    runs-on: ubuntu-latest
+    outputs:
+      id: version
+      set-env:
+        FLUTTER_VERSION: ${{ steps.get_version.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Get Flutter App Version
+        id: get_version
+        run: echo "::set-output name=version::$(grep -oP 'version: \K(.*)' pubspec.yaml | head -n 1 | tr -d '\r')"
+        
   flutter_test:
     name: Run Flutter Test
+    needs: [get_version]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -38,8 +56,8 @@ jobs:
     name: Build Flutter App (Android)
     needs: [flutter_test]
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && ${{ needs.flutter_test.outputs.FLUTTER_VERSION }} != ''
     steps:
-      - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -64,8 +82,8 @@ jobs:
     name: Build Flutter App (Windows)
     needs: [flutter_test]
     runs-on: windows-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && ${{ needs.flutter_test.outputs.FLUTTER_VERSION }} != ''
     steps:
-      - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -85,7 +103,7 @@ jobs:
         uses: thedoctor0/zip-release@0.7.5
         with:
           type: 'zip'
-          filename: 'release${{ github.run_number}}.zip'
+          filename: 'release${{ github.run_number }}.zip'
           directory: build/windows/x64/runner/Release/
       - uses: actions/upload-artifact@v2
         with:
@@ -96,6 +114,7 @@ jobs:
     name: Create Release
     needs: [build_androidApk, build_windowsExe]
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && ${{ needs.flutter_test.outputs.FLUTTER_VERSION }} != ''
     steps:
       - name: Download Android Artifact
         uses: actions/download-artifact@v2
@@ -118,5 +137,5 @@ jobs:
           artifacts: |
             build/app/outputs/apk/release/*.apk
             build/windows/x64/runner/Release/*.zip
-          tag: v1.0.${{ github.run_number}}
+          tag: v${{ needs.flutter_test.outputs.FLUTTER_VERSION }}
           token: ${{ secrets.TOKEN }}
