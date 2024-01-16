@@ -1,0 +1,42 @@
+name: Parse and Echo Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  parse-version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      # Define an output named 'parsed-version' to store the parsed version
+      id: parse-version
+      settable: ${{ steps.parse.outputs.parsed-version }}
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Display File Content
+      run: cat ver.txt
+
+    - name: Parse Version
+      id: parse
+      run: |
+        version=$(grep '^v=' ver.txt | cut -d'=' -f2)
+        echo "Parsed Version: $version"
+        
+        # Set the parsed version as an output
+        echo "::set-output name=parsed-version::$version"
+
+  echo-version:
+    needs: parse-version
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Echo Version
+      run: | 
+        # Retrieve the parsed version from the 'parse-version' job output
+        parsed_version=${{ needs.parse-version.outputs.parsed-version }}
+        echo "Parsed Version2: $parsed_version"
