@@ -95,5 +95,6 @@ jobs:
           files: |
             build/app/outputs/apk/debug/*.apk
             build/windows/*.exe
+          tag: v1.0.${{ github.run_number}}
           token: ${{ secrets.TOKEN }}
 
