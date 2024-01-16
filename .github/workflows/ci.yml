@@ -75,7 +75,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: windows-build
-          path: build/windows/x64/runner/Release/release.zip
+          path: build/windows/x64/runner/Release/
 
   create_release:
     name: Create Release
@@ -92,7 +92,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: windows-build
-          path: build/windows/x64/runner/Release/release.zip
+          path: build/windows/x64/runner/Release/
 
       - name: Create GitHub Release
         id: create_release
@@ -102,6 +102,6 @@ jobs:
           artifactErrorsFailBuild: true
           artifacts: |
             build/app/outputs/apk/release/*.apk
-            build/windows/x64/runner/Release/release.zip
+            build/windows/x64/runner/Release/*.zip
           tag: v1.0.${{ github.run_number}}
           token: ${{ secrets.TOKEN }}
