@@ -19,7 +19,7 @@ jobs:
       - name: Get Flutter App Version
         id: get_version
         run: |
-          echo "::set-output name=version::$(grep -oP 'version: \K(.*)' pubspec.yaml | head -n 1 | tr -d '\r')"
+          echo "::set-output name=version::$(grep -oP 'version: \K(.*)' $GITHUB_WORKSPACE/pubspec.yaml | head -n 1 | tr -d '\r')"
         
 
   flutter_test:
