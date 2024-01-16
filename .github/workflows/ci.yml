@@ -19,6 +19,8 @@ jobs:
       - name: Get Flutter App Version
         id: get_version
         run: |
+          echo "Current directory: $(pwd)"
+          ls -la
           echo "::set-output name=version::$(grep -oP 'version: \K(.*)' $GITHUB_WORKSPACE/pubspec.yaml | head -n 1 | tr -d '\r')"
         
 
