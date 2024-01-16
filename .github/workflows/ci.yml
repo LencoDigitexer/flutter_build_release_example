@@ -22,8 +22,7 @@ jobs:
         run: |
           echo "Current directory: $(pwd)"
           ls -la
-          echo "::set-output name=version::$(grep -oP 'version: \K(.*)' $GITHUB_WORKSPACE/pubspec.yaml | head -n 1 | tr -d '\r')"
-          echo grep -oP 'version: \K(.*)' $GITHUB_WORKSPACE/pubspec.yaml | head -n 1 | tr -d '\r'
+          echo "APP_VERSION=$(grep -oP 'version: \K(.*)' pubspec.yaml | head -n 1 | tr -d '\r')" >> $GITHUB_ENV
         
   
   echo_version:
@@ -33,7 +32,7 @@ jobs:
     steps:
       - name: Echo Version
         run: | 
-          echo "Version from get_version: ${{ needs.get_version.outputs.version }}"
+          echo "TETSTSTYTDSYFTYUFDTYU   ${{ env.APP_VERSION }}"
 
   flutter_test:
     name: Run Flutter Test
