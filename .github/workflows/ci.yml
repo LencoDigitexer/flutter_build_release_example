@@ -25,6 +25,15 @@ jobs:
           echo "::set-output name=version::$(grep -oP 'version: \K(.*)' $GITHUB_WORKSPACE/pubspec.yaml | head -n 1 | tr -d '\r')"
           echo v${{ needs.flutter_test.outputs.FLUTTER_VERSION }}
         
+  
+  echo_version:
+    name: Echo Flutter App Version
+    runs-on: ubuntu-latest
+    needs: get_version
+    steps:
+      - name: Echo Version
+        run: | 
+          echo "Version from get_version: ${{ needs.get_version.outputs.version }}"
 
   flutter_test:
     name: Run Flutter Test
