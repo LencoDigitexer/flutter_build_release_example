@@ -75,7 +75,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: windows-build
-          path: .
+          path: build/windows/x64/runner/Release/release.zip
 
   create_release:
     name: Create Release
@@ -92,7 +92,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: windows-build
-          path: .
+          path: build/windows/x64/runner/Release/release.zip
 
       - name: Create GitHub Release
         id: create_release
