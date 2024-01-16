@@ -23,6 +23,7 @@ jobs:
           echo "Current directory: $(pwd)"
           ls -la
           echo "::set-output name=version::$(grep -oP 'version: \K(.*)' $GITHUB_WORKSPACE/pubspec.yaml | head -n 1 | tr -d '\r')"
+          echo v${{ needs.flutter_test.outputs.FLUTTER_VERSION }}
         
 
   flutter_test:
