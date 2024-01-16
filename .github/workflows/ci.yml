@@ -90,11 +90,13 @@ jobs:
 
       - name: Create GitHub Release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
-          files: |
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          artifacts: |
             build/app/outputs/apk/debug/*.apk
             build/windows/*.exe
           tag: v1.0.${{ github.run_number}}
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.TOKEN}}  
 
