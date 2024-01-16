@@ -67,14 +67,15 @@ jobs:
       - run: flutter clean
       - run: flutter build windows --release
       - name: Zip artifacts
-        run: |
-          mkdir release-zip
-          cp -R build/windows/x64/runner/Release/* release-zip/
-          zip -r windows-release.zip release-zip/*
+        uses: thedoctor0/zip-release@0.7.5
+        with:
+          type: 'zip'
+          filename: 'release.zip'
+          exclusions: 'build/windows/x64/runner/Release/*'
       - uses: actions/upload-artifact@v2
         with:
           name: windows-build
-          path: windows-release.zip
+          path: .
 
   create_release:
     name: Create Release
@@ -91,7 +92,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: windows-build
-          path: windows-release.zip
+          path: .
 
       - name: Create GitHub Release
         id: create_release
@@ -101,6 +102,6 @@ jobs:
           artifactErrorsFailBuild: true
           artifacts: |
             build/app/outputs/apk/release/*.apk
-            windows-release.zip
+            release.zip
           tag: v1.0.${{ github.run_number}}
           token: ${{ secrets.TOKEN }}
