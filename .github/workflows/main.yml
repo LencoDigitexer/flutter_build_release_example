@@ -1,0 +1,32 @@
+name: Parse and Echo Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  parse-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Display File Content
+      run: cat ver.txt
+
+    - name: Parse Version
+      id: parse
+      run: |
+        echo "version=$(grep '^v=' ver.txt | cut -d'=' -f2)"  >> $GITHUB_ENV
+        echo "Parsed Version: $version"
+
+  echo-version:
+    needs: parse-version
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Echo Version
+      run: | 
+        echo "Parsed Version: ${{ env.version }}"
