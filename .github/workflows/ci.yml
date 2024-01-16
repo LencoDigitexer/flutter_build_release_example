@@ -21,6 +21,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.pub-cache
+          key: pub-cache-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml') }}
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -39,6 +44,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.pub-cache
+          key: pub-cache-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml') }}
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -60,6 +70,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.pub-cache
+          key: pub-cache-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml') }}
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -70,7 +85,7 @@ jobs:
         uses: thedoctor0/zip-release@0.7.5
         with:
           type: 'zip'
-          filename: 'release.zip'
+          filename: 'release${{ github.run_number}}.zip'
           directory: build/windows/x64/runner/Release/
       - uses: actions/upload-artifact@v2
         with:
